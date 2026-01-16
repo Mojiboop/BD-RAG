@@ -12,6 +12,7 @@ if not api_key:
 client = genai.Client(api_key=api_key)
 parser = argparse.ArgumentParser(description="Chatbot")
 parser.add_argument("user_prompt", type=str, help="User prompt")
+parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
 args = parser.parse_args()
 messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
 
@@ -24,9 +25,14 @@ usage = response.usage_metadata
 if not usage:
     raise RuntimeError("Gemini API response appears to be missing usage metadata")
 
-print(f"Prompt tokens: {usage.prompt_token_count}")
-print(f"Response tokens: {usage.candidates_token_count}")
-print(f"Response:\n{response.text}")
+if args.verbose == True:
+    print(f"User prompt: {args.user_prompt}")
+    print(f"Prompt tokens: {usage.prompt_token_count}")
+    print(f"Response tokens: {usage.candidates_token_count}")
+    print(f"Response:\n{response.text}")
+else:
+    print(f"Response:\n{response.text}")
+
 
 
 
