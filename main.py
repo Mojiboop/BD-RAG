@@ -1,4 +1,5 @@
 import os
+import argparse
 from dotenv import load_dotenv
 from google import genai
 
@@ -8,10 +9,13 @@ if not api_key:
     raise ValueError("Please input your api key into .env")
 
 client = genai.Client(api_key=api_key)
+parser = argparse.ArgumentParser(description="Chatbot")
+parser.add_argument("user_prompt", type=str, help="User prompt")
+args = parser.parse_args()
 
 response = client.models.generate_content(
     model='gemini-2.5-flash',
-    contents="""Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum.""",
+    contents=args.user_prompt,
     )
 usage = response.usage_metadata
 
