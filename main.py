@@ -13,8 +13,14 @@ response = client.models.generate_content(
     model='gemini-2.5-flash',
     contents="""Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum.""",
     )
+usage = response.usage_metadata
 
-print(response.text)
+if not usage:
+    raise RuntimeError("Gemini API response appears to be missing usage metadata")
+
+print(f"Prompt tokens: {usage.prompt_token_count}")
+print(f"Response tokens: {usage.candidates_token_count}")
+print(f"Response:\n{response.text}")
 
 
 
